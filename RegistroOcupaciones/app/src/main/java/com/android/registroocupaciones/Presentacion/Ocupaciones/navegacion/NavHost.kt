@@ -22,7 +22,7 @@ fun OcupacionNavHost(
         composable<Screen.OcupacionList>{
             OcupacionListScreen(
                 onAddOcupacion = {
-                    navController.navigate(Screen.OcupacionForm)
+                    navController.navigate(Screen.OcupacionForm())
                 },
                 onEditOcupacion = {id-> navController.navigate(Screen.OcupacionForm(ocupacionId = id))}
             )
