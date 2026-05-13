@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
+import com.android.registroocupaciones.Presentacion.Ocupaciones.navegacion.Screen
 import com.android.registroocupaciones.domain.model.Ocupacion
 import com.android.registroocupaciones.domain.usecase.DeleteOcupacionUseCase
 import com.android.registroocupaciones.domain.usecase.GetOcupacionUseCase
@@ -33,7 +34,7 @@ class OcupacionFormViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    private val ocupacionId: Int? = savedStateHandle.get<Int>("id")
+    private val ocupacionId = savedStateHandle.toRoute<Screen.OcupacionForm>().ocupacionId
 
     private val _state = MutableStateFlow(OcupacionFormUiState())
     val state: StateFlow<OcupacionFormUiState> = _state.asStateFlow()

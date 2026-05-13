@@ -56,21 +56,21 @@ fun OcupacionListScreen(
 @Composable
 fun OcupacionListBody(
     state: OcupacionListUiState,
-    onEvente: (OcupacionesListUiEvent) -> Unit,
+    onEvent: (OcupacionesListUiEvent) -> Unit,
     onAddOcupacion:() -> Unit,
     onEditClick:(Int) -> Unit
 ){
-    val snackbarHostStat = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(state.message) {
         state.message?.let{
-            message -> snackbarHostStat.showSnackbar(message)
-            onEvente(OcupacionesListUiEvent.ClearMessage)
+            message -> snackbarHostState.showSnackbar(message)
+            onEvent(OcupacionesListUiEvent.ClearMessage)
         }
     }
 
     Scaffold(
-        snackbarHost={ SnackbarHost(snackbarHostStat) },
+        snackbarHost={ SnackbarHost(snackbarHostState) },
         floatingActionButton =
             {
                 FloatingActionButton(
@@ -120,7 +120,7 @@ fun OcupacionListBody(
                             OcupacionItem(
                                 ocupacion = ocupacion,
                                 onEdit = {onEditClick(ocupacion.OcupacionId)},
-                                onDelete = { onEvente(OcupacionesListUiEvent.Delete(ocupacion.OcupacionId)) }
+                                onDelete = { onEvent(OcupacionesListUiEvent.Delete(ocupacion.OcupacionId)) }
                             )
                         }
                     }
@@ -140,7 +140,7 @@ fun OcupacionItem(
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth().clickable{onEdit()}
-            .testTag("task_itema_${ocupacion.OcupacionId}")
+            .testTag("ocupacion_Item${ocupacion.OcupacionId}")
     ){
         Row(
             modifier = Modifier
