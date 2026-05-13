@@ -1,8 +1,8 @@
 package com.android.registroocupaciones.data.repository
 
 import com.android.registroocupaciones.data.local.OcupacionDao
-import com.android.registroocupaciones.data.local.OcupacionEntity
 import com.android.registroocupaciones.data.mapper.toDomain
+import com.android.registroocupaciones.data.mapper.toEntity
 import com.android.registroocupaciones.domain.model.Ocupacion
 import com.android.registroocupaciones.domain.repository.OcupacionRepository
 import kotlinx.coroutines.flow.map
@@ -18,11 +18,10 @@ class OcupacionRepositoryImpl(
     override suspend fun getOcupacion(id: Int): Ocupacion? = dao.getById(id)?.toDomain()
 
     override suspend fun upsert(ocupacion: Ocupacion): Int {
-        dao.upsert(OcupacionEntity())
-        return ocupacion.OcupacionId
+        return dao.upsert(ocupacion.toEntity()).toInt()
     }
 
     override suspend fun delete(id: Int) {
-        dao.delete(id)
+        dao.deleteById(id)
     }
 }

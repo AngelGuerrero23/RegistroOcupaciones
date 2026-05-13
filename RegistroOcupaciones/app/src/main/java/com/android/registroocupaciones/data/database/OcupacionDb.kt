@@ -8,12 +8,12 @@ import com.android.registroocupaciones.domain.model.Ocupacion
 
 @Database(
     entities = [
-        OcupacionEntity:: class,
+        OcupacionEntity::class,
     ],
     version = 1,
     exportSchema = false
 )
 
 abstract class OcupacionDb : RoomDatabase() {
-    abstract fun OcupacionDb(): OcupacionDao
+    abstract fun ocupacionDao(): OcupacionDao
 }
