@@ -2,11 +2,22 @@ package com.android.registroocupaciones.di
 
 import android.content.Context
 import androidx.room.Room
-import com.android.registroocupaciones.data.database.OcupacionDb
-import com.android.registroocupaciones.data.local.OcupacionDao
-import com.android.registroocupaciones.data.repository.OcupacionRepositoryImpl
-import com.android.registroocupaciones.domain.repository.OcupacionRepository
-import com.android.registroocupaciones.domain.usecase.*
+import com.android.registroempleados.data.local.EmpleadosDao
+import com.android.registroempleados.data.repository.EmpleadosRepositoryImpl
+import com.android.registroempleados.domain.model.Empleados
+import com.android.registroempleados.domain.repository.EmpleadosRepository
+import com.android.registroempleados.domain.usecase.DeleteEmpleadoUseCase
+import com.android.registroempleados.domain.usecase.GetEmpleadoUseCase
+import com.android.registroempleados.domain.usecase.ObserveEmpleadoUseCase
+import com.android.registroempleados.domain.usecase.UpsertEmpleadoUseCase
+import com.android.registroocupaciones.data.database.RegistroDb
+import com.android.registroocupaciones.data.ocupacion.local.OcupacionDao
+import com.android.registroocupaciones.data.ocupacion.repository.OcupacionRepositoryImpl
+import com.android.registroocupaciones.domain.ocupacion.repository.OcupacionRepository
+import com.android.registroocupaciones.domain.ocupacion.usecase.DeleteOcupacionUseCase
+import com.android.registroocupaciones.domain.ocupacion.usecase.GetOcupacionUseCase
+import com.android.registroocupaciones.domain.ocupacion.usecase.ObserveOcupacionUseCase
+import com.android.registroocupaciones.domain.ocupacion.usecase.UpsertOcupacionUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,17 +31,55 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideOcupacionDb(@ApplicationContext context: Context): OcupacionDb {
+    fun provideOcupacionDb(@ApplicationContext context: Context): RegistroDb {
         return Room.databaseBuilder(
             context,
-            OcupacionDb::class.java,
-            "ocupaciones_db"
-        ).build()
+            RegistroDb::class.java,
+            "ocupaciones_db",
+
+        ).fallbackToDestructiveMigration().build()
     }
 
     @Provides
     @Singleton
-    fun provideOcupacionDao(db: OcupacionDb): OcupacionDao {
+    fun provideEmpleadoDao(db: RegistroDb): EmpleadosDao {
+        return db.empleadosDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEmpleadoRepository(dao: EmpleadosDao): EmpleadosRepository {
+        return EmpleadosRepositoryImpl(dao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetEmpleadoUseCase(repository: EmpleadosRepository): GetEmpleadoUseCase {
+        return GetEmpleadoUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUpsertEmpleadoUseCase(repository: EmpleadosRepository): UpsertEmpleadoUseCase {
+        return UpsertEmpleadoUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDeleteEmpleadoUseCase(repository: EmpleadosRepository): DeleteEmpleadoUseCase {
+        return DeleteEmpleadoUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideObserveEmpleadoUseCase(repository: EmpleadosRepository): ObserveEmpleadoUseCase {
+        return ObserveEmpleadoUseCase(repository)
+    }
+
+
+    @Provides
+    @Singleton
+    fun provideOcupacionDao(db: RegistroDb): OcupacionDao {
         return db.ocupacionDao()
     }
 
