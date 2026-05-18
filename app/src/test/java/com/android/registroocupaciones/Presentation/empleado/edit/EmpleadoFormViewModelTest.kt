@@ -88,7 +88,7 @@ class EmpleadoFormViewModelTest {
         assertEquals("Miguel Angel", stateNew.nombres)
         assertEquals(fecha, stateNew.fechaIngreso)
         assertEquals("Masculino", stateNew.sexo)
-        assertEquals(45000.00, stateNew.sueldo)
+        assertEquals("45000.00", stateNew.sueldo)
     }
 
     @Test
