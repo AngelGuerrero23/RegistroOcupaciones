@@ -58,7 +58,7 @@ fun validateFecha(fecha: java.time.LocalDate): ValidationResult{
 fun validateSueldo(sueldo: String): ValidationResult{
     return  when{
         sueldo.isBlank() -> ValidationResult(false,
-            "El sueldo no puede estar vacio tu no cobra es")
+            "El monto no puede estar vacio")
         sueldo.toDoubleOrNull() == null -> ValidationResult(false,
             "Ingrese un sueldo valido")
         sueldo.toDouble() <= 0.0 -> ValidationResult(false,

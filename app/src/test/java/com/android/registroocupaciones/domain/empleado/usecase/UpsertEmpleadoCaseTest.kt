@@ -8,6 +8,7 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -22,6 +23,7 @@ class UpsertEmpleadoCaseTest {
     @Before
     fun setup(){
         repository = mockk()
+        coEvery { repository.observeEmpleados() } returns flowOf(emptyList())
         useCase = UpsertEmpleadoUseCase(repository)
     }
 
@@ -38,7 +40,7 @@ class UpsertEmpleadoCaseTest {
     @Test
     fun `invoke save employee with invalid dates`() = runTest {
         val empleado = Empleados(0,"Miguel",LocalDate.now(), "Masculino", 30000.00 )
-        coEvery { repository.upsert(empleado) } returns 1
+        coEvery { repository.upsert(any()) } returns 1
 
         val result = useCase(empleado)
 
@@ -79,9 +81,9 @@ class UpsertEmpleadoCaseTest {
 
     @Test
     fun `invoke gender field is empty`() = runTest {
-        val empelado = Empleados(0, "Minguito", LocalDate.now(), "", 25000.00)
+        val empleado = Empleados(0, "Minguito", LocalDate.now(), "", 25000.00)
 
-        val result = useCase(empelado)
+        val result = useCase(empleado)
 
         assertTrue(result.isFailure)
         assertTrue(result.exceptionOrNull() is IllegalArgumentException)
