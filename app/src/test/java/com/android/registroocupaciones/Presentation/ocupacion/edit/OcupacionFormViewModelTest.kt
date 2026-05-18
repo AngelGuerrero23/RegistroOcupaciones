@@ -77,7 +77,7 @@ class OcupacionFormViewModelTest {
         coEvery { getOcupacion(7) } returns Ocupacion(
             OcupacionId = 7,
             Descripcion = "Ingeniero en Software",
-            Sueldo = 85000.00
+            Sueldo = 85000.0
         )
 
         val savedStateHandle = SavedStateHandle(mapOf("ocupacionId" to 7))
@@ -90,7 +90,7 @@ class OcupacionFormViewModelTest {
         assertFalse(stateNew.isNew)
         assertEquals(7, stateNew.ocupacionId)
         assertEquals("Ingeniero en Software",stateNew.descripcion)
-        assertEquals("85000.00", stateNew.sueldo)
+        assertEquals("85000.0", stateNew.sueldo)
     }
 
     @Test

@@ -9,11 +9,18 @@ class UpsertEmpleadoUseCase(
 ) {
     suspend operator fun invoke(empleados: Empleados): Result<Int>
     {
-        val listaActual = repository.observeEmpleados().first().map { it.nombres }
-        val nombresResult = validateNombres(empleados.nombres, listaActual)
-        if(!nombresResult.isValid){
-            return Result.failure(IllegalArgumentException(nombresResult.error))
+        if (empleados.nombres.isBlank()) {
+            return Result.failure(IllegalArgumentException("El nombre no puede estar vacío"))
         }
+        if (empleados.nombres.trim().length < 3) {
+            return Result.failure(IllegalArgumentException("El nombre debe tener al menos 3 caracteres"))
+        }
+
+        val regex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$".toRegex()
+        if (!empleados.nombres.matches(regex)) {
+            return Result.failure(IllegalArgumentException("El nombre contiene caracteres inválidos"))
+        }
+
         val sueldoResult = validateSueldo(empleados.sueldo.toString())
         if(!sueldoResult.isValid)
         {
