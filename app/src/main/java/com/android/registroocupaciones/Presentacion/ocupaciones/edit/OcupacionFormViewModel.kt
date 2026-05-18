@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import com.android.registroocupaciones.Presentacion.ocupaciones.navegacion.Screen
+import com.android.registroocupaciones.Presentacion.navegacion.Screen
 import com.android.registroocupaciones.domain.ocupacion.model.Ocupacion
 import com.android.registroocupaciones.domain.ocupacion.usecase.DeleteOcupacionUseCase
 import com.android.registroocupaciones.domain.ocupacion.usecase.GetOcupacionUseCase

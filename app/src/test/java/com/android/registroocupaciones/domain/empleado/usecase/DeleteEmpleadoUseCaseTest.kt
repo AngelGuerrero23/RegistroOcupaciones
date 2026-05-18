@@ -2,6 +2,7 @@ package com.android.registroocupaciones.domain.empleado.usecase
 
 import com.android.registroempleados.domain.repository.EmpleadosRepository
 import com.android.registroempleados.domain.usecase.DeleteEmpleadoUseCase
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
@@ -25,7 +26,7 @@ class DeleteEmpleadoUseCaseTest {
 
     @Test
     fun `calls repository delete with id`() = runTest {
-        coEvery { repository.delete(5) } just runs
+        coEvery { repository.delete(5) } just Runs
 
         useCase(5)
 

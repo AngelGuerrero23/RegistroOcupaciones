@@ -18,7 +18,8 @@ class OcupacionRepositoryImpl(
     override suspend fun getOcupacion(id: Int): Ocupacion? = dao.getById(id)?.toDomain()
 
     override suspend fun upsert(ocupacion: Ocupacion): Int {
-        return dao.upsert(ocupacion.toEntity()).toInt()
+        dao.upsert(ocupacion.toEntity())
+        return ocupacion.OcupacionId?: 0
     }
 
     override suspend fun delete(id: Int) {

@@ -1,4 +1,4 @@
-package com.android.registroocupaciones.Presentacion.ocupaciones.list
+package com.android.registroocupaciones.Presentacion.empleado.list
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,12 +9,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -31,54 +31,56 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.android.registroocupaciones.domain.ocupacion.model.Ocupacion
+import com.android.registroempleados.domain.model.Empleados
+import java.time.LocalDate
 
 @Composable
-fun OcupacionListScreen(
-    viewModel: OcupacionListViewModel = hiltViewModel(),
-    onAddOcupacion: () -> Unit,
-    onEditOcupacion: (Int) -> Unit
-){
+fun EmpleadoListScreen(
+    viewModel: EmpleadoListViewModel = hiltViewModel(),
+    onAddEmpleado: () -> Unit,
+    onEditEmpleado: (Int) -> Unit
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.navigateToCreate) {
         if(state.navigateToCreate){
-            onAddOcupacion()
+            onAddEmpleado()
         }
     }
 
     LaunchedEffect(state.navigateToEditId) {
         state.navigateToEditId?.let {
-            id-> onEditOcupacion(id)
+            id-> onEditEmpleado(id)
         }
     }
 
-    OcupacionListBody(
+    EmpleadoListBody(
         state = state,
         viewModel::onEvent,
-        onAddOcupacion = onAddOcupacion,
-        onEditClick = onEditOcupacion)
+        onAddEmpleado = onAddEmpleado,
+        onEditClick = onEditEmpleado)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OcupacionListBody(
-    state: OcupacionListUiState,
-    onEvent: (OcupacionesListUiEvent) -> Unit,
-    onAddOcupacion:() -> Unit,
-    onEditClick:(Int) -> Unit
+fun EmpleadoListBody(
+    state: EmpleadoListUiState,
+    onEvent: (EmpleadosListUiEvent) -> Unit,
+    onAddEmpleado: () -> Unit,
+    onEditClick: (Int) -> Unit
 ){
     val snackbarHostState = remember { SnackbarHostState() }
 
-    LaunchedEffect(state.message) {
-        state.message?.let{
+    LaunchedEffect(state.message){
+        state.message?.let {
             message -> snackbarHostState.showSnackbar(message)
-            onEvent(OcupacionesListUiEvent.ClearMessage)
+            onEvent(EmpleadosListUiEvent.ClearMessage)
         }
     }
 
@@ -87,118 +89,112 @@ fun OcupacionListBody(
         floatingActionButton =
             {
                 FloatingActionButton(
-                    onClick = onAddOcupacion,
-                    modifier= Modifier.testTag("fab_add")
+                    onClick = onAddEmpleado,
+                    modifier = Modifier.testTag("fab_add")
                 ) {
                     Icon(
                         imageVector = Icons.Default.Add,
-                        contentDescription = "Agregar Ocupación"
+                        contentDescription = "Agregar Empleado"
                     )
                 }
             }
     ) {
         padding ->
         Box(
-            modifier= Modifier
+            modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ){
-            if(state.isLoading)
+            if(state.empleado.isEmpty())
             {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .align ( Alignment.Center)
-                        .testTag("loading...")
+                Text(
+                    text = "No hay empleados",
+                    modifier= Modifier
+                        .align(Alignment.Center)
+                        .testTag("empty message"),
+                    style = MaterialTheme.typography.bodyLarge
                 )
             }else{
-                if(state.ocupacion.isEmpty())
-                {
-                    Text(
-                        text="No hay Ocupaciones",
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .testTag("empty_messaage"),
-                        style = MaterialTheme.typography.bodyLarge
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(
+                        items = state.empleado,
+                        key = {it.empleadosId}
                     )
-                }else{
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(
-                            items = state.ocupacion,
-                            key = {it.OcupacionId}
-                        ){ocupacion ->
-                            OcupacionItem(
-                                ocupacion = ocupacion,
-                                onEdit = {onEditClick(ocupacion.OcupacionId)},
-                                onDelete = { onEvent(OcupacionesListUiEvent.Delete(ocupacion.OcupacionId)) }
-                            )
-                        }
+                    {empleado ->
+                        EmpleadoItem(
+                            empleado = empleado,
+                            onEdit = {onEditClick(empleado.empleadosId)},
+                            onDelete = {onEvent(EmpleadosListUiEvent.Delete(empleado.empleadosId))}
+                        )
+
                     }
                 }
             }
-
         }
     }
 }
-
 @Composable
-fun OcupacionItem(
-    ocupacion: Ocupacion,
-    onEdit: ()-> Unit,
+fun EmpleadoItem(
+    empleado : Empleados,
+    onEdit: () -> Unit,
     onDelete: () -> Unit
 ){
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth().clickable{onEdit()}
-            .testTag("ocupacion_Item${ocupacion.OcupacionId}")
-    ){
+            .testTag("empleado_Item${empleado.empleadosId}")
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Column(
                 modifier = Modifier.weight(1f)
-            ){
+            ) {
                 Text(
-                    text= ocupacion.Descripcion,
+                    text = empleado.nombres,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "RD$ ${ocupacion.Sueldo}",
+                    text = "Sexo ${empleado.sexo} | Ingreso ${empleado.fechaIngreso}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "RD$ ${empleado.sueldo}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
             IconButton(
                 onClick = onDelete,
-                modifier = Modifier.testTag("btn_delete_${ocupacion.OcupacionId}")
+                modifier = Modifier.testTag("btn_delete_${empleado.empleadosId}")
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar ocupación"
+                    contentDescription = "Eliminar empleado"
                 )
             }
         }
     }
-
 }
 
 @Preview(showBackground = true)
 @Composable
-private fun OcupacionListBodyPreview(){
+private fun EmpleadoListBodyPreview(){
     MaterialTheme{
-        val state = OcupacionListUiState(
+        val state = EmpleadoListUiState(
             isLoading = false,
-            ocupacion = listOf(
-                Ocupacion(OcupacionId =1, Descripcion ="Ingeniero en Sistemas", Sueldo =50000.00)
+            empleado = listOf(
+                Empleados(1, "Angel Guerrero", LocalDate.now(), "Masculino", 105000.00)
             )
         )
-        OcupacionListBody(state, {}, {},{})
+        EmpleadoListBody(state, {},{},{})
     }
 }
-

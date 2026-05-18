@@ -18,7 +18,8 @@ data class EmpleadosRepositoryImpl(
     override suspend fun getEmpleados(id:Int): Empleados? = dao.getById(id)?.toDomain()
 
     override suspend fun upsert(empleados: Empleados): Int{
-        return dao.upsert(empleados.toEntity()).toInt()
+        dao.upsert(empleados.toEntity())
+            return empleados.empleadosId?:0
     }
 
     override suspend fun delete(id: Int){

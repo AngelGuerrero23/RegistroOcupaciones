@@ -37,11 +37,9 @@ fun validateNombres(nombres: String, empleadosExistentes: List<String>) : Valida
 fun validateSexo(sexoSeleccionado: String): ValidationResult
 {
     val sexo = sexoSeleccionado.trim()
-    val opcionesValidas = listOf("Masculino", "Femenino", "Otros")
+    val opcionesValidas = listOf("Masculino", "Femenino")
     return when{
         sexoSeleccionado.isBlank() ->ValidationResult(false,"Debe seleccionar una opción")
-        opcionesValidas.none(){it.equals(sexo, ignoreCase = true)}->
-            ValidationResult(false, "El sexo seleccionado no es válido")
         else-> ValidationResult(true)
     }
 }
