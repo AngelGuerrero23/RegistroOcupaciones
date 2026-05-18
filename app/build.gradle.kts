@@ -111,6 +111,8 @@ dependencies {
 
     // Room Testing
     testImplementation("androidx.room:room-testing:2.6.0")
+
+    testImplementation("org.robolectric:robolectric:4.12.1")
 }
 
 configurations.all {
