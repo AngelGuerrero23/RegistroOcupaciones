@@ -3,6 +3,7 @@ package com.android.registroempleados.domain.usecase
 import com.android.registroempleados.domain.model.Empleados
 import com.android.registroempleados.domain.repository.EmpleadosRepository
 import kotlinx.coroutines.flow.first
+import java.time.LocalDate
 
 class UpsertEmpleadoUseCase(
     private val repository: EmpleadosRepository
@@ -21,11 +22,20 @@ class UpsertEmpleadoUseCase(
             return Result.failure(IllegalArgumentException("El nombre contiene caracteres inválidos"))
         }
 
+        if (empleados.fechaIngreso.isAfter(LocalDate.now())) {
+            return Result.failure(IllegalArgumentException("La fecha de ingreso no puede ser futura"))
+        }
+
         val sueldoResult = validateSueldo(empleados.sueldo.toString())
         if(!sueldoResult.isValid)
         {
             return Result.failure(IllegalArgumentException(sueldoResult.error))
         }
+
+        if(empleados.sexo.isBlank()){
+            return Result.failure(IllegalArgumentException("El campo no puede estar vacío"))
+        }
+
         return runCatching { repository.upsert(empleados) }
     }
 }
