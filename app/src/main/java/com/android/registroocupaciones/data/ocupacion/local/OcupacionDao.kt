@@ -1,6 +1,7 @@
 package com.android.registroocupaciones.data.ocupacion.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +10,8 @@ import kotlinx.coroutines.flow.Flow
 interface OcupacionDao {
     @Upsert
     suspend fun upsert(entity: OcupacionEntity)
+    @Delete
+    suspend fun delete(entity: OcupacionEntity)
     @Query("Select * from Ocupaciones ORDER BY OcupacionId DESC")
     fun observeAll(): Flow<List<OcupacionEntity>>
 

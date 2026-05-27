@@ -3,5 +3,5 @@ package com.android.registroocupaciones.domain.ocupacion.model
 data class Ocupacion(
     val OcupacionId:Int = 0,
     val Descripcion: String = "",
-    val Sueldo: Double = 0.0
+    val esPuestoDireccion : Boolean = false
 )

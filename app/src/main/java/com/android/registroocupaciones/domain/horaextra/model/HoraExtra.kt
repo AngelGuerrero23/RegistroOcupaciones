@@ -2,17 +2,15 @@ package com.android.registroocupaciones.domain.horaextra.model
 
 import java.time.LocalDate
 
-class HoraExtra {
-    var horaExtraId : Int = 0
-    var empleadoId: Int = 0
-    var fecha: LocalDate = LocalDate.now()
-    var cantidadHoras : Int = 0
-    var tipo : TipoHoraExtra = TipoHoraExtra.Diurna
-    var frecuenciaPago: FrecuenciaPago = FrecuenciaPago.Mensual
-    var recargo : Double = 0.0
+data class HoraExtra (
+    var horaExtraId : Int = 0,
+    var empleadoId: Int = 0,
+    var fecha: LocalDate = LocalDate.now(),
+    var cantidadHoras : Int = 0,
+    var tipoHoraExtra : TipoHoraExtra = TipoHoraExtra.Diurna,
+    var recargo : Double = 0.0,
     var esPuestoDireccion : Boolean = false
-}
-
+)
 enum class TipoHoraExtra(val descripcion: String, porcentajeRecarga: Double){
     Diurna("Diurna", 1.35),
     Nocturna("Nocturna", 1.5),

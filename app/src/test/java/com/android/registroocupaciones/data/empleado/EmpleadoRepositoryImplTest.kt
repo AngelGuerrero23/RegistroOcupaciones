@@ -90,8 +90,8 @@ class EmpleadoRepositoryImplTest {
     @Test
     fun `observe the employee method returns a flow of employees recors`()= runTest {
         val entities = listOf(
-            HorasExtrasEntity(1, "Miguel", Tipo = "Masculino", Recargo = 75000.00),
-            HorasExtrasEntity(2, "Josefina", Tipo = "Femenino", Recargo = 65000.00)
+            Empleados(1, "Miguel", Tipo = "Masculino", Recargo = 75000.00),
+            Empleados(2, "Josefina", Tipo = "Femenino", Recargo = 65000.00)
         )
         every { dao.observeAll() } returns flowOf(entities)
 
@@ -104,7 +104,7 @@ class EmpleadoRepositoryImplTest {
 
     @Test
     fun `getEmpleado returns employee by id`()= runTest {
-        val entity = HorasExtrasEntity(1, "Ana", Tipo = "Femenino", Recargo = 35000.00)
+        val entity = Empleados(1, "Ana", Tipo = "Femenino", Recargo = 35000.00)
         coEvery { dao.getById(1) } returns entity
 
         val result = repository.getEmpleados(1)

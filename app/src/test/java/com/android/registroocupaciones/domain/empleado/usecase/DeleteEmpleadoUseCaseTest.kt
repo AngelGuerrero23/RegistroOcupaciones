@@ -1,13 +1,12 @@
 package com.android.registroocupaciones.domain.empleado.usecase
 
-import com.android.registroempleados.domain.repository.EmpleadosRepository
+import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
 import com.android.registroempleados.domain.usecase.DeleteEmpleadoUseCase
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.runs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
