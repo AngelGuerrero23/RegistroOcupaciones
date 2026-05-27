@@ -16,11 +16,13 @@ import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.android.registroocupaciones.domain.horaextra.model.FrecuenciaPago
 import java.time.Instant
 import java.time.ZoneId
 
@@ -250,6 +252,37 @@ fun EmpleadoFormScreen(
                     }
                 }
             )
+            ExposedDropdownMenuBox(
+                expanded = frecuenciaPagoExpanded,
+                onExpandedChange = {frecuenciaPagoExpanded = it}
+            ) {
+                OutlinedTextField(
+                    value = state.frecuenciaPago.descripcion,
+                    onValueChange = {},
+                    readOnly = true,
+                    label = {Text("Frecuencia de Pago")},
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = frecuenciaPagoExpanded)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                        .testTag("input_Frecuencia"),
+                    isError = state.frecuenciaPagoError !=null,
+                    supportingText = state.frecuenciaPagoError?.let {{Text(it)} },
+                )
+                ExposedDropdownMenu(
+                    expanded = frecuenciaPagoExpanded,
+                    onDismissRequest = {frecuenciaPagoExpanded = false}
+                ) {
+                    FrecuenciaPago.entries.forEach { frecuencia ->
+                        DropdownMenuItem(
+                            text = {Text(frecuencia.descripcion)},
+                            onClick = {viewModel.onEvent(EmpleadoFormUiEvent.FrecuenciaPagoChanged(frecuencia))
+                            frecuenciaPagoExpanded = false}
+                        )
+                    }
+                }
+            }
             if (showDatePicker) {
                 DatePickerDialog(
                     onDismissRequest = {

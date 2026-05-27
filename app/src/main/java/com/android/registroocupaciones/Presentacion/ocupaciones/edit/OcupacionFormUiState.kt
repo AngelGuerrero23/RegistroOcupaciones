@@ -5,6 +5,7 @@ data class OcupacionFormUiState(
     val descripcion: String = "",
     val esPuestoDireccion: Boolean = false,
     val descripcionError: String? = null,
+    val errorMessage: String? = null,
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
     val isNew: Boolean = true,

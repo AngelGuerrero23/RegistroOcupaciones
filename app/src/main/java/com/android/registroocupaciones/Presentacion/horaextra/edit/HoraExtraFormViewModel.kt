@@ -115,7 +115,7 @@ class HoraExtraFormViewModel @Inject constructor(
             return
         }
 
-        val tipoValidation = validateTipoHoraExtra(tipo.descripcion, cantidadHoras)
+        val tipoValidation = validateTipoHoraExtra(state.value.tipo, cantidadHoras)
 
         if(!tipoValidation.isValid){
             _state.update {

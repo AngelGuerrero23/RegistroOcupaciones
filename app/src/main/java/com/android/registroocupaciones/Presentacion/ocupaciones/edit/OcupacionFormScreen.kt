@@ -1,6 +1,7 @@
 package com.android.registroocupaciones.Presentacion.ocupaciones.edit
 
 
+import android.widget.Toast
 import androidx.compose.material3.Icon
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +32,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -44,11 +46,16 @@ fun OcupacionFormScreen(
     onBack: () -> Unit
 ){
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(state.saved, state.deleted) {
         if(state.saved || state.deleted){
             onBack()
         }
+    }
+    LaunchedEffect(state.errorMessage) {
+        state.errorMessage?.let { message -> Toast.makeText(context,message, Toast.LENGTH_LONG).show()
+        viewModel.onEvent(OcupacionFormUiEvent.CleanError)}
     }
 
     Scaffold(
@@ -79,23 +86,14 @@ fun OcupacionFormScreen(
                     .testTag("input_descripcion"),
                 isError = state.descripcionError != null,
                 supportingText = state.descripcionError?.let { {Text(it)} },
-                singleLine = false,
-                minLines = 3,
-                maxLines = 5
+                singleLine = true
             )
-            if(state.descripcionError !=null)
-            {
-                Text(
-                    state.descripcionError!!,
-                    color = MaterialTheme.colorScheme.error
-                )
-            }
-
             Row(
-                Modifier.fillMaxWidth()
+                Modifier
+                    .fillMaxWidth()
                     .toggleable(
                         value = state.esPuestoDireccion,
-                        onValueChange ={ isCheked ->
+                        onValueChange = { isCheked ->
                             viewModel.onEvent(OcupacionFormUiEvent.esPuestoDireccionChanged(isCheked))
                         },
                         role = androidx.compose.ui.semantics.Role.Checkbox
@@ -138,7 +136,8 @@ fun OcupacionFormScreen(
                     onClick = {
                         viewModel.onEvent(OcupacionFormUiEvent.Delete)
                     },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .testTag("btn_delete"),
                     enabled = !state.isDeleting,
                     colors = ButtonDefaults.buttonColors(

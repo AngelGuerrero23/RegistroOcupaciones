@@ -17,7 +17,7 @@ import com.android.registroocupaciones.data.ocupacion.local.OcupacionEntity
         EmpleadosEntity::class,
         HorasExtrasEntity::class,
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(Converters::class)

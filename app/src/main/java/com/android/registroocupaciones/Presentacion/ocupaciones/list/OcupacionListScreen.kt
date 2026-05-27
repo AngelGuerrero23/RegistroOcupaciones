@@ -166,11 +166,6 @@ fun OcupacionItem(
                     text= ocupacion.Descripcion,
                     style = MaterialTheme.typography.bodyLarge
                 )
-                Text(
-                    text = "Puesto de Direccion",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.primary
-                )
             }
         }
     }
