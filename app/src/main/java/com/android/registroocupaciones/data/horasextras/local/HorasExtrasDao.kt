@@ -5,19 +5,19 @@ import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 @Dao
-interface EmpleadosDao {
+interface HorasExtrasDao {
     @Upsert
     suspend fun upsert(entity: HorasExtrasEntity)
 
-    @Query ("Select * from Empleados ORDER BY EmpleadosId")
+    @Query ("Select * from HoraExtra ORDER BY horaExtraId")
     fun observeAll(): Flow<List<HorasExtrasEntity>>
 
-    @Query("Select * from Empleados WHERE EmpleadosId=:id")
+    @Query("Select * from HoraExtra WHERE horaExtraId=:id")
     suspend fun getById(id: Int): HorasExtrasEntity
 
-    @Query("Delete from Empleados WHERE EmpleadosId=:id")
+    @Query("Delete from HoraExtra WHERE horaExtraId=:id")
     suspend fun deleteById(id: Int)
 
-    @Query("Select exists(Select 1 from Empleados WHERE EmpleadosId=:id)")
+    @Query("Select exists(Select 1 from HoraExtra WHERE horaExtraId=:id)")
     suspend fun exists(id: Int): Boolean
 }
