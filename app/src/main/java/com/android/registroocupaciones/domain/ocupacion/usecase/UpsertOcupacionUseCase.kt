@@ -14,11 +14,7 @@ class UpsertOcupacionUseCase(
         if(!descriptionResult.isValid){
             return Result.failure(IllegalArgumentException(descriptionResult.error))
         }
-        val sueldoResult = validateSueldo(ocupacion.Sueldo.toString())
-        if(!sueldoResult.isValid)
-        {
-            return Result.failure(IllegalArgumentException(sueldoResult.error))
-        }
+
         return runCatching{repository.upsert(ocupacion)}
     }
 

@@ -7,5 +7,5 @@ class GetOcupacionUseCase(
     private val repository: OcupacionRepository
 )
 {
-    suspend operator fun invoke(id: Int): Ocupacion?= repository.getOcupacion(id)
+    suspend operator fun invoke(id: Int) = repository.getOcupacion(id)
 }

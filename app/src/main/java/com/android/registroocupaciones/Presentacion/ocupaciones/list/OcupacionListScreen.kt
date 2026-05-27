@@ -132,8 +132,7 @@ fun OcupacionListBody(
                         ){ocupacion ->
                             OcupacionItem(
                                 ocupacion = ocupacion,
-                                onEdit = {onEditClick(ocupacion.OcupacionId)},
-                                onDelete = { onEvent(OcupacionesListUiEvent.Delete(ocupacion.OcupacionId)) }
+                                onEdit = {onEditClick(ocupacion.OcupacionId)}
                             )
                         }
                     }
@@ -148,7 +147,6 @@ fun OcupacionListBody(
 fun OcupacionItem(
     ocupacion: Ocupacion,
     onEdit: ()-> Unit,
-    onDelete: () -> Unit
 ){
     ElevatedCard(
         modifier = Modifier
@@ -169,24 +167,16 @@ fun OcupacionItem(
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "RD$ ${ocupacion.Sueldo}",
+                    text = "Puesto de Direccion",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            IconButton(
-                onClick = onDelete,
-                modifier = Modifier.testTag("btn_delete_${ocupacion.OcupacionId}")
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar ocupación"
-                )
-            }
         }
     }
-
 }
+
+
 
 @Preview(showBackground = true)
 @Composable
@@ -195,7 +185,7 @@ private fun OcupacionListBodyPreview(){
         val state = OcupacionListUiState(
             isLoading = false,
             ocupacion = listOf(
-                Ocupacion(OcupacionId =1, Descripcion ="Ingeniero en Sistemas", Sueldo =50000.00)
+                Ocupacion(OcupacionId =1, Descripcion ="Ingeniero en Sistemas")
             )
         )
         OcupacionListBody(state, {}, {},{})

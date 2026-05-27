@@ -15,8 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OcupacionListViewModel @Inject constructor(
-    private val observeOcupacionUseCase: ObserveOcupacionUseCase,
-    private val deleteOcupacionUseCase: DeleteOcupacionUseCase
+    private val observeOcupacionUseCase: ObserveOcupacionUseCase
 ): ViewModel() {
     private val _state = MutableStateFlow(OcupacionListUiState(isLoading = true))
     val state: StateFlow<OcupacionListUiState> = _state.asStateFlow()
@@ -26,17 +25,16 @@ class OcupacionListViewModel @Inject constructor(
     }
 
     fun onEvent(event: OcupacionesListUiEvent) {
-        when (event) {
+        when(event) {
             OcupacionesListUiEvent.Load -> loadOcupacion()
             OcupacionesListUiEvent.Refresh -> loadOcupacion()
-            is OcupacionesListUiEvent.Delete -> onDelete(event.id)
             is OcupacionesListUiEvent.ShowMessage -> _state.update { it.copy(message = event.message) }
             OcupacionesListUiEvent.ClearMessage ->_state.update { it.copy(message = null) }
             OcupacionesListUiEvent.CreateNew ->_state.update { it.copy(navigateToCreate = true) }
             is OcupacionesListUiEvent.Edit -> _state.update { it.copy(navigateToEditId = event.id) }
-
         }
     }
+    
 
     fun loadOcupacion(){
         viewModelScope.launch {
@@ -44,12 +42,5 @@ class OcupacionListViewModel @Inject constructor(
             observeOcupacionUseCase().collectLatest { list->_state.update { it.copy(
                 isLoading = false, ocupacion = list, message = null) }}
         }
-    }
-    private fun onDelete(id: Int) {
-        viewModelScope.launch {
-            deleteOcupacionUseCase(id)
-            onEvent(OcupacionesListUiEvent.ShowMessage("Eliminado"))
-        }
-
     }
 }

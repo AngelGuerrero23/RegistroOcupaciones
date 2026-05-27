@@ -7,5 +7,5 @@ class GetEmpleadoUseCase(
     private val repository: EmpleadosRepository)
 
 {
-    suspend operator fun invoke(id: Int): Empleados?= repository.getEmpleados(id)
+    suspend operator fun invoke(id: Int) = repository.getEmpleados(id)
 }

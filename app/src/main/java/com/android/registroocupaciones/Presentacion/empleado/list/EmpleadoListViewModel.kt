@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.registroempleados.domain.usecase.DeleteEmpleadoUseCase
 import com.android.registroempleados.domain.usecase.ObserveEmpleadoUseCase
+import com.android.registroocupaciones.domain.ocupacion.usecase.ObserveOcupacionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,20 +17,20 @@ import javax.inject.Inject
 @HiltViewModel
 class EmpleadoListViewModel @Inject constructor(
     private val observeEmpleadoUseCase: ObserveEmpleadoUseCase,
-    private val deleteEmpleadoUseCase: DeleteEmpleadoUseCase
+    private val observeOcupacionUseCase: ObserveOcupacionUseCase
 ): ViewModel(){
     private val _state = MutableStateFlow(EmpleadoListUiState(isLoading = true))
     val state: StateFlow<EmpleadoListUiState> = _state.asStateFlow()
 
     init{
         loadEmpleado()
+        loadOcupaciones()
     }
 
     fun onEvent(event: EmpleadosListUiEvent){
-        when (event){
+        when(event){
             EmpleadosListUiEvent.Load-> loadEmpleado()
             EmpleadosListUiEvent.Refresh -> loadEmpleado()
-            is EmpleadosListUiEvent.Delete -> onDelete(event.id)
             is EmpleadosListUiEvent.ShowMessage -> _state.update { it.copy(message = event.message) }
             EmpleadosListUiEvent.ClearMessage -> _state.update { it.copy(message = null) }
             EmpleadosListUiEvent.CreateNew ->_state.update { it.copy(navigateToCreate = true) }
@@ -45,10 +46,9 @@ class EmpleadoListViewModel @Inject constructor(
         }
     }
 
-    private fun onDelete(id: Int){
+    fun loadOcupaciones(){
         viewModelScope.launch {
-            deleteEmpleadoUseCase(id)
-            onEvent(EmpleadosListUiEvent.ShowMessage("Eliminado"))
+            observeOcupacionUseCase().collectLatest { list -> _state.update { it.copy(ocupaciones = list) } }
         }
     }
 }

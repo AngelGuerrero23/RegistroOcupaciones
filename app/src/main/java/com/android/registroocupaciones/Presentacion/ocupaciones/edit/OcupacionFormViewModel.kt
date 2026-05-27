@@ -11,7 +11,6 @@ import com.android.registroocupaciones.domain.ocupacion.usecase.GetOcupacionUseC
 import com.android.registroocupaciones.domain.ocupacion.usecase.ObserveOcupacionUseCase
 import com.android.registroocupaciones.domain.ocupacion.usecase.UpsertOcupacionUseCase
 import com.android.registroocupaciones.domain.ocupacion.usecase.validateDescripcion
-import com.android.registroocupaciones.domain.ocupacion.usecase.validateSueldo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,8 +51,8 @@ class OcupacionFormViewModel @Inject constructor(
                 it.copy(descripcion = event.value, descripcionError = null)
             }
 
-            is OcupacionFormUiEvent.SueldoChanged -> _state.update {
-                it.copy(sueldo = event.value, sueldoError = null)
+            is OcupacionFormUiEvent.esPuestoDireccionChanged -> _state.update {
+                it.copy(esPuestoDireccion = event.value)
             }
 
             OcupacionFormUiEvent.Save -> onSave()
@@ -74,7 +73,7 @@ class OcupacionFormViewModel @Inject constructor(
                         isNew = false,
                         ocupacionId = ocupacion.OcupacionId,
                         descripcion = ocupacion.Descripcion,
-                        sueldo = ocupacion.Sueldo.toString()
+                        esPuestoDireccion = ocupacion.esPuestoDireccion
                     )
                 }
             } else {
@@ -86,13 +85,11 @@ class OcupacionFormViewModel @Inject constructor(
     private fun onSave() {
         val descripcion = state.value.descripcion
         val descripcionValidation = validateDescripcion(descripcion, ocupacionesExistentes)
-        val sueldoValidation = validateSueldo(state.value.sueldo)
 
-        if (!descripcionValidation.isValid || !sueldoValidation.isValid) {
+        if (!descripcionValidation.isValid) {
             _state.update {
                 it.copy(
-                    descripcionError = descripcionValidation.error,
-                    sueldoError = sueldoValidation.error
+                    descripcionError = descripcionValidation.error
                 )
             }
             return
@@ -103,7 +100,7 @@ class OcupacionFormViewModel @Inject constructor(
             val ocupacion = Ocupacion(
                 OcupacionId = state.value.ocupacionId ?: 0,
                 Descripcion = descripcion,
-                Sueldo = state.value.sueldo.toDouble()
+                esPuestoDireccion = state.value.esPuestoDireccion
             )
 
             val result = upsertOcupacionUseCase(ocupacion)

@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
@@ -37,7 +38,9 @@ class MainActivity : ComponentActivity() {
                     TopLevelRoute("Empleado", Screen.EmpleadoList,
                         Icons.Default.Person),
                     TopLevelRoute("Ocupacion", Screen.OcupacionList,
-                        Icons.Default.Home)
+                        Icons.Default.Home),
+                    TopLevelRoute("HoraExtra", Screen.HoraExtraList,
+                        Icons.Default.AccessTime)
                 )
                 Scaffold(
                     bottomBar = {
