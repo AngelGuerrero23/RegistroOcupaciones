@@ -16,15 +16,5 @@ fun validateDescripcion(descripcion: String, ocupacionesExistentes: List<String>
         else -> ValidationResult(true)
     }
 }
-fun validateSueldo(sueldo: String): ValidationResult
-{
-    val sueldoDouble = sueldo.toDoubleOrNull()
-    return when{
-        sueldo.isBlank()-> ValidationResult(false,"El sueldo no puede estár vacío")
-        sueldoDouble == null -> ValidationResult(false,"El sueldo debe ser numero")
-        sueldoDouble <= 0 -> ValidationResult(false,"El sueldo debe ser mayor a 0")
-        else-> ValidationResult(true)
-    }
-}
 
 

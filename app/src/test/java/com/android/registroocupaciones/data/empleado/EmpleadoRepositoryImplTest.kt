@@ -2,7 +2,7 @@ package com.android.registroocupaciones.data.empleado
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.android.registroempleados.data.local.EmpleadosDao
-import com.android.registroempleados.data.local.EmpleadosEntity
+import com.android.registroempleados.data.local.HorasExtrasEntity
 import com.android.registroempleados.data.repository.EmpleadosRepositoryImpl
 import com.android.registroempleados.domain.model.Empleados
 import io.mockk.Runs
@@ -48,17 +48,17 @@ class EmpleadoRepositoryImplTest {
             "Femenino",
             49000.00
         )
-        val empleadoSlot = slot<EmpleadosEntity>()
+        val empleadoSlot = slot<HorasExtrasEntity>()
         coEvery{dao.upsert(capture(empleadoSlot))} just Runs
 
         val result = repository.upsert(empleado)
 
         assertEquals(0, result)
         coEvery { dao.upsert((any())) }
-        assertEquals(empleado.nombres, empleadoSlot.captured.Nombres)
-        assertEquals(empleado.sueldo, empleadoSlot.captured.Sueldo, 0.0)
+        assertEquals(empleado.nombres, empleadoSlot.captured.Fecha)
+        assertEquals(empleado.sueldo, empleadoSlot.captured.Recargo, 0.0)
         assertEquals(empleado.fechaIngreso, empleadoSlot.captured.FechaIngreso)
-        assertEquals(empleado.sexo, empleadoSlot.captured.Sexo)
+        assertEquals(empleado.sexo, empleadoSlot.captured.Tipo)
     }
 
     @Test
@@ -90,8 +90,8 @@ class EmpleadoRepositoryImplTest {
     @Test
     fun `observe the employee method returns a flow of employees recors`()= runTest {
         val entities = listOf(
-            EmpleadosEntity(1, "Miguel", LocalDate.now(), "Masculino",75000.00),
-            EmpleadosEntity(2,"Josefina", LocalDate.now(), "Femenino", 65000.00)
+            Empleados(1, "Miguel", Tipo = "Masculino", Recargo = 75000.00),
+            Empleados(2, "Josefina", Tipo = "Femenino", Recargo = 65000.00)
         )
         every { dao.observeAll() } returns flowOf(entities)
 
@@ -104,7 +104,7 @@ class EmpleadoRepositoryImplTest {
 
     @Test
     fun `getEmpleado returns employee by id`()= runTest {
-        val entity = EmpleadosEntity(1,"Ana", LocalDate.now(), "Femenino", 35000.00)
+        val entity = Empleados(1, "Ana", Tipo = "Femenino", Recargo = 35000.00)
         coEvery { dao.getById(1) } returns entity
 
         val result = repository.getEmpleados(1)

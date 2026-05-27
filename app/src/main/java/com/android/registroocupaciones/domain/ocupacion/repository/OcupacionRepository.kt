@@ -9,4 +9,5 @@ interface OcupacionRepository {
     suspend fun  getOcupacion(id: Int): Ocupacion?
     suspend fun upsert(ocupacion: Ocupacion): Int
     suspend fun delete(id:Int)
+    suspend fun exists(id: Int): Boolean
 }

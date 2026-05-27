@@ -1,29 +1,23 @@
 package com.android.registroempleados.domain.usecase
 
 import com.android.registroempleados.domain.model.Empleados
-import com.android.registroempleados.domain.repository.EmpleadosRepository
-import kotlinx.coroutines.flow.first
+import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
 import java.time.LocalDate
+import javax.inject.Inject
 
-class UpsertEmpleadoUseCase(
+class UpsertEmpleadoUseCase @Inject constructor(
     private val repository: EmpleadosRepository
 ) {
     suspend operator fun invoke(empleados: Empleados): Result<Int>
     {
-        if (empleados.nombres.isBlank()) {
-            return Result.failure(IllegalArgumentException("El nombre no puede estar vacío"))
-        }
-        if (empleados.nombres.trim().length < 3) {
-            return Result.failure(IllegalArgumentException("El nombre debe tener al menos 3 caracteres"))
+        val nombresResult = validateNombres(empleados.nombres)
+        if (!nombresResult.isValid) {
+            return Result.failure(IllegalArgumentException(nombresResult.error))
         }
 
-        val regex = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ ]+$".toRegex()
-        if (!empleados.nombres.matches(regex)) {
-            return Result.failure(IllegalArgumentException("El nombre contiene caracteres inválidos"))
-        }
-
-        if (empleados.fechaIngreso.isAfter(LocalDate.now())) {
-            return Result.failure(IllegalArgumentException("La fecha de ingreso no puede ser futura"))
+        val fechaIngresoResult = validateFecha(empleados.fechaIngreso)
+        if (!fechaIngresoResult.isValid) {
+            return Result.failure(IllegalArgumentException(fechaIngresoResult.error))
         }
 
         val sueldoResult = validateSueldo(empleados.sueldo.toString())
@@ -32,8 +26,18 @@ class UpsertEmpleadoUseCase(
             return Result.failure(IllegalArgumentException(sueldoResult.error))
         }
 
-        if(empleados.sexo.isBlank()){
-            return Result.failure(IllegalArgumentException("El campo no puede estar vacío"))
+        val sexoResult = validateSexo(empleados.sexo)
+        if(!sexoResult.isValid){
+            return Result.failure(IllegalArgumentException(sexoResult.error))
+        }
+        val ocupacionResult = validateOcupacionId(empleados.ocupacionId)
+        if(!ocupacionResult.isValid){
+            return Result.failure(IllegalArgumentException(ocupacionResult.error))
+        }
+
+        val frecuenciaPagoResult = validateFrecuenciaPago(empleados.frecuenciaPago.toString())
+        if (!frecuenciaPagoResult.isValid){
+            return Result.failure(IllegalArgumentException(frecuenciaPagoResult.error))
         }
 
         return runCatching { repository.upsert(empleados) }

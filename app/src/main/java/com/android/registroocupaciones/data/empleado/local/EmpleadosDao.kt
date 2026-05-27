@@ -1,6 +1,7 @@
 package com.android.registroempleados.data.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
@@ -9,6 +10,8 @@ interface EmpleadosDao {
     @Upsert
     suspend fun upsert(entity: EmpleadosEntity)
 
+    @Delete
+    suspend fun delete(entity: EmpleadosEntity)
     @Query ("Select * from Empleados ORDER BY EmpleadosId")
     fun observeAll(): Flow<List<EmpleadosEntity>>
 

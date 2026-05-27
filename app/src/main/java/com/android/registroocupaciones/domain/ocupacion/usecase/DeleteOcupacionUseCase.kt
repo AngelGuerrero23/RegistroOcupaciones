@@ -1,8 +1,9 @@
 package com.android.registroocupaciones.domain.ocupacion.usecase
 
 import com.android.registroocupaciones.domain.ocupacion.repository.OcupacionRepository
+import javax.inject.Inject
 
-class DeleteOcupacionUseCase(
+class DeleteOcupacionUseCase @Inject constructor(
     private val repository: OcupacionRepository
 )
 {

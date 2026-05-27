@@ -1,16 +1,17 @@
 package com.android.registroempleados.domain.usecase
 
 import com.android.registroempleados.domain.model.Empleados
+import java.time.LocalDate
 
 data class ValidationResult(
     val isValid: Boolean,
     val error: String?= null
 )
 
-fun validateNombres(nombres: String, empleadosExistentes: List<String>) : ValidationResult {
+fun validateNombres(nombres: String) : ValidationResult {
     return when {
         nombres.isBlank() -> ValidationResult(false, "El nombre no puede estar vacío")
-        nombres.length < 2 -> ValidationResult(
+        nombres.trim().length < 2 -> ValidationResult(
             false,
             "El nombre debe contener al menos 3 caracteres"
         )
@@ -44,8 +45,8 @@ fun validateSexo(sexoSeleccionado: String): ValidationResult
     }
 }
 
-fun validateFecha(fecha: java.time.LocalDate): ValidationResult{
-    val fechaActual = java.time.LocalDate.now()
+fun validateFecha(fecha: LocalDate): ValidationResult{
+    val fechaActual = LocalDate.now()
     return when{
         fecha.isAfter(fechaActual) -> ValidationResult(false,"Le fecha de ingreso" +
         " no puede ser una fecha futura")
@@ -63,6 +64,20 @@ fun validateSueldo(sueldo: String): ValidationResult{
             "Ingrese un sueldo valido")
         sueldo.toDouble() <= 0.0 -> ValidationResult(false,
             "El sueldo tiene que ser mayor que cero")
+        else -> ValidationResult(true)
+    }
+}
+
+fun validateOcupacionId(ocupacionId: Int): ValidationResult {
+    return when {
+        ocupacionId <= 0 -> ValidationResult(false, "Debe seleccionar una ocupaciónId")
+        else -> ValidationResult(true)
+    }
+}
+
+fun validateFrecuenciaPago(frecuencia: String): ValidationResult {
+    return when {
+        frecuencia.isBlank() -> ValidationResult(false, "Debe seleccionar una frecuencia de pago")
         else -> ValidationResult(true)
     }
 }

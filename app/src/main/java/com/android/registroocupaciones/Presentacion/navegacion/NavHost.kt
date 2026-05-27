@@ -12,6 +12,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.android.registroocupaciones.Presentacion.empleado.edit.EmpleadoFormScreen
 import com.android.registroocupaciones.Presentacion.empleado.list.EmpleadoListScreen
+import com.android.registroocupaciones.Presentacion.horaextra.edit.HoraExtraFormScreen
+import com.android.registroocupaciones.Presentacion.horaextra.list.HoraExtraListScreen
 import com.android.registroocupaciones.Presentacion.ocupaciones.edit.OcupacionFormScreen
 import com.android.registroocupaciones.Presentacion.ocupaciones.list.OcupacionListScreen
 
@@ -55,6 +57,20 @@ fun RegistroNavHost(
             EmpleadoFormScreen(
             viewModel= hiltViewModel(),
             onBack= { navController.navigateUp() }
+            )
+        }
+        composable<Screen.HoraExtraList> {
+            HoraExtraListScreen (
+                onAddHoraExtra = {navController.navigate(Screen.HoraExtraForm())},
+                onEditHoraExtra = {id ->
+                    navController.navigate(Screen.HoraExtraForm(horaExtraId = id))
+                }
+            )
+        }
+
+        composable<Screen.HoraExtraForm> {
+            HoraExtraFormScreen (
+                onBack = {navController.navigateUp()}
             )
         }
     }

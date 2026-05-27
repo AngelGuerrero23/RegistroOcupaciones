@@ -1,11 +1,10 @@
 package com.android.registroocupaciones.domain.empleado.usecase
 
 import com.android.registroempleados.domain.model.Empleados
-import com.android.registroempleados.domain.repository.EmpleadosRepository
+import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
 import com.android.registroempleados.domain.usecase.GetEmpleadoUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
-import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

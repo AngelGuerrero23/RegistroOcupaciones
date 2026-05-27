@@ -1,7 +1,7 @@
 package com.android.registroocupaciones.domain.empleado.usecase
 
 import com.android.registroempleados.domain.model.Empleados
-import com.android.registroempleados.domain.repository.EmpleadosRepository
+import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
 import com.android.registroempleados.domain.usecase.UpsertEmpleadoUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify

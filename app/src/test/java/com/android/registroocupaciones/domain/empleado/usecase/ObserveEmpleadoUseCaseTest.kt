@@ -1,18 +1,15 @@
 package com.android.registroocupaciones.domain.empleado.usecase
 
 import com.android.registroempleados.domain.model.Empleados
-import com.android.registroempleados.domain.repository.EmpleadosRepository
+import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
 import com.android.registroempleados.domain.usecase.ObserveEmpleadoUseCase
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test

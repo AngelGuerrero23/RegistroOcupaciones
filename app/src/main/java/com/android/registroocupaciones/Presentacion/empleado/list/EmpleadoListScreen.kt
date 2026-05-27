@@ -128,7 +128,7 @@ fun EmpleadoListBody(
                         EmpleadoItem(
                             empleado = empleado,
                             onEdit = {onEditClick(empleado.empleadosId)},
-                            onDelete = {onEvent(EmpleadosListUiEvent.Delete(empleado.empleadosId))}
+                            state = state
                         )
 
                     }
@@ -141,7 +141,7 @@ fun EmpleadoListBody(
 fun EmpleadoItem(
     empleado : Empleados,
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    state: EmpleadoListUiState
 ){
     ElevatedCard(
         modifier = Modifier
@@ -162,23 +162,29 @@ fun EmpleadoItem(
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "Sexo ${empleado.sexo} | Ingreso ${empleado.fechaIngreso}",
+                    text = empleado.sexo,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
                 Text(
-                    text = "RD$ ${empleado.sueldo}",
+                    text = (state.ocupaciones.find { it.OcupacionId == empleado.ocupacionId })?.Descripcion?:"",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary
                 )
-            }
-            IconButton(
-                onClick = onDelete,
-                modifier = Modifier.testTag("btn_delete_${empleado.empleadosId}")
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar empleado"
+                Text(
+                    text = empleado.fechaIngreso.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = "RD${empleado.sueldo}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
+                )
+                Text(
+                    text = empleado.frecuenciaPago.descripcion,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -192,7 +198,7 @@ private fun EmpleadoListBodyPreview(){
         val state = EmpleadoListUiState(
             isLoading = false,
             empleado = listOf(
-                Empleados(1, "Angel Guerrero", LocalDate.now(), "Masculino", 105000.00)
+                Empleados(1, 1, "Angel Guerrero", "Masculino", LocalDate.now(),25000.0)
             )
         )
         EmpleadoListBody(state, {},{},{})

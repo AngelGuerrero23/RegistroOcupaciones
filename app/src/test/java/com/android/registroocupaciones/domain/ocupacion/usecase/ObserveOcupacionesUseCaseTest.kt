@@ -1,6 +1,5 @@
 package com.android.registroocupaciones.domain.ocupacion.usecase
 
-import com.android.registroempleados.domain.repository.EmpleadosRepository
 import com.android.registroocupaciones.domain.ocupacion.model.Ocupacion
 import com.android.registroocupaciones.domain.ocupacion.repository.OcupacionRepository
 import io.mockk.coEvery

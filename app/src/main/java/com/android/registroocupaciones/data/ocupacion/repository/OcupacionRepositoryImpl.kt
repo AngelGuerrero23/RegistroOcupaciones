@@ -7,15 +7,18 @@ import com.android.registroocupaciones.domain.ocupacion.model.Ocupacion
 import com.android.registroocupaciones.domain.ocupacion.repository.OcupacionRepository
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class OcupacionRepositoryImpl(
+class OcupacionRepositoryImpl @Inject constructor(
     private val dao: OcupacionDao
 ): OcupacionRepository {
-    override fun observeOcupacion(): Flow<List<Ocupacion>> = dao.observeAll().map {
-        list-> list.map { it.toDomain() }
+    override fun observeOcupacion(): Flow<List<Ocupacion>> {
+        return dao.observeAll().map { entities -> entities.map { it.toDomain() } }
     }
 
-    override suspend fun getOcupacion(id: Int): Ocupacion? = dao.getById(id)?.toDomain()
+    override suspend fun getOcupacion(id: Int): Ocupacion? {
+        return dao.getById(id)?.toDomain()
+    }
 
     override suspend fun upsert(ocupacion: Ocupacion): Int {
         dao.upsert(ocupacion.toEntity())
@@ -24,5 +27,9 @@ class OcupacionRepositoryImpl(
 
     override suspend fun delete(id: Int) {
         dao.deleteById(id)
+    }
+
+    override suspend fun exists(id: Int): Boolean{
+        return dao.exists(id)
     }
 }
