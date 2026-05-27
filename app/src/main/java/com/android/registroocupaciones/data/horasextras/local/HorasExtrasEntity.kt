@@ -11,17 +11,17 @@ import java.time.LocalDate
     foreignKeys = [
         ForeignKey(
             entity = EmpleadosEntity::class,
-            parentColumns = ["empleadoId"],
-            childColumns = ["empleadoId"],
+            parentColumns = ["empleadosId"],
+            childColumns = ["empleadosId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("empleadoId")]
+    indices = [Index("empleadosId")]
 )
 data class HorasExtrasEntity(
     @PrimaryKey(autoGenerate = true)
     var horaExtraId: Int = 0,
-    var empleadoId: Int =0,
+    var empleadosId: Int =0,
     var fecha: LocalDate = LocalDate.now(),
     var cantidadHoras: Int = 0,
     var tipohoraExtra: TipoHoraExtra = TipoHoraExtra.Diurna,

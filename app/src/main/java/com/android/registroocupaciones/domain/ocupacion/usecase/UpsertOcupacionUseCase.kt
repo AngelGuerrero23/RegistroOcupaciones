@@ -3,8 +3,9 @@ package com.android.registroocupaciones.domain.ocupacion.usecase
 import com.android.registroocupaciones.domain.ocupacion.model.Ocupacion
 import com.android.registroocupaciones.domain.ocupacion.repository.OcupacionRepository
 import kotlinx.coroutines.flow.first
+import javax.inject.Inject
 
-class UpsertOcupacionUseCase(
+class UpsertOcupacionUseCase @Inject constructor(
     private val repository: OcupacionRepository
 ) {
     suspend operator fun invoke(ocupacion: Ocupacion): Result<Int>

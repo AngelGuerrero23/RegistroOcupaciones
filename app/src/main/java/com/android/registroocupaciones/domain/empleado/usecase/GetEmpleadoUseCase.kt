@@ -1,9 +1,9 @@
 package com.android.registroempleados.domain.usecase
 
-import com.android.registroempleados.domain.model.Empleados
 import com.android.registroocupaciones.domain.empleado.repository.EmpleadosRepository
+import javax.inject.Inject
 
-class GetEmpleadoUseCase(
+class GetEmpleadoUseCase @Inject constructor(
     private val repository: EmpleadosRepository)
 
 {

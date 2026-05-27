@@ -1,8 +1,9 @@
 package com.android.registroocupaciones.domain.horaextra.usecase
 
 import com.android.registroocupaciones.domain.horaextra.repository.HoraExtraRepository
+import javax.inject.Inject
 
-class DeleteHoraExtraUseCase(
+class DeleteHoraExtraUseCase @Inject constructor(
     private val repository: HoraExtraRepository
 )
 {

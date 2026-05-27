@@ -6,7 +6,7 @@ import com.android.registroocupaciones.domain.horaextra.model.HoraExtra
 
 fun HorasExtrasEntity.toDomain() = HoraExtra(
     horaExtraId = horaExtraId,
-    empleadoId = empleadoId,
+    empleadoId = empleadosId,
     fecha = fecha,
     cantidadHoras = cantidadHoras,
     tipoHoraExtra = tipohoraExtra,
@@ -17,7 +17,7 @@ fun HorasExtrasEntity.toDomain() = HoraExtra(
 
 fun HoraExtra.toEntity() = HorasExtrasEntity(
     horaExtraId = horaExtraId,
-    empleadoId = empleadoId,
+    empleadosId = empleadoId,
     fecha = fecha,
     cantidadHoras = cantidadHoras,
     tipohoraExtra = tipoHoraExtra,
