@@ -43,7 +43,6 @@ class EmpleadoFormViewModel @Inject constructor(
     val state: StateFlow<EmpleadoFormUiState> = _state.asStateFlow()
 
     init {
-        loadEmpleados(empleadoId)
         loadOcupacion()
     }
 
@@ -70,7 +69,7 @@ class EmpleadoFormViewModel @Inject constructor(
         }
     }
 
-    private fun loadEmpleados(id: Int?) {
+    fun loadEmpleados(id: Int?) {
         if (id == null || id == 0) {
             _state.update { it.copy(isNew = true, empleadoId = null) }
             return
@@ -101,14 +100,14 @@ class EmpleadoFormViewModel @Inject constructor(
     }
 
     private fun onSave(){
-        val ocupacionId = state.value.ocupacionId
+        val ocupacionId = state.value.ocupacionId.toIntOrNull()?:0
         val fechaIngreso = state.value.fechaIngreso
         val nombres = state.value.nombres
         val sexo = state.value.sexo
         val sueldoText = state.value.sueldo
         val frecuenciaPago = state.value.frecuenciaPago
 
-        val ocupacionValidation = validateOcupacionId(ocupacionId.toInt())
+        val ocupacionValidation = validateOcupacionId(ocupacionId)
         val fechaIngresoValidation = validateFecha(fechaIngreso)
         val nombresValidation = validateNombres(nombres)
         val sexoValidation = validateSexo(sexo)

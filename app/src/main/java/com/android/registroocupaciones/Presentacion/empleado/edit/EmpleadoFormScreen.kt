@@ -29,6 +29,7 @@ import java.time.ZoneId
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EmpleadoFormScreen(
+    empleadoId: Int,
     viewModel: EmpleadoFormViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
@@ -45,6 +46,9 @@ fun EmpleadoFormScreen(
 
     val opcionesSexo = listOf("Masculino", "Femenino")
 
+    LaunchedEffect(key1 = empleadoId) {
+        viewModel.loadEmpleados(empleadoId)
+    }
     LaunchedEffect(state.saved, state.deleted) {
         if (state.saved || state.deleted) {
             onBack()
