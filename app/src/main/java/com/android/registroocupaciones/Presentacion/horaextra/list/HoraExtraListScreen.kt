@@ -100,11 +100,11 @@ fun HoraExtraListBody(
                     ) {
                         items(
                             items = state.horasExtra,
-                            key = {it.empleadoId}
+                            key = {it.horaExtraId}
                         ){ horasExtra ->
                             HoraExtraItem(
                                 horaExtra = horasExtra,
-                                onEdit = {onEditClick(horasExtra.empleadoId)},
+                                onEdit = {onEditClick(horasExtra.horaExtraId)},
                                 state = state
                             )
                         }

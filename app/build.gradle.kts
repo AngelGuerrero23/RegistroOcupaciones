@@ -113,6 +113,13 @@ dependencies {
     testImplementation("androidx.room:room-testing:2.6.0")
 
     testImplementation("org.robolectric:robolectric:4.12.1")
+
+    // Adaptative Screen
+    implementation(libs.compose.adaptive)
+    implementation(libs.compose.adaptive.layout)
+    implementation(libs.compose.adaptive.nav)
+    implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0")
+    implementation("androidx.compose.material3:material3-window-size-class:1.3.0")
 }
 
 configurations.all {

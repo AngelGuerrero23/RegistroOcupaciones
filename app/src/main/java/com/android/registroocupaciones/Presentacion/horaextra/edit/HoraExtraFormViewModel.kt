@@ -43,7 +43,6 @@ class HoraExtraFormViewModel @Inject constructor(
     val state: StateFlow<HoraExtraFormUiState> = _state.asStateFlow()
 
     init {
-        loadHoraExtra(horaExtraId)
         loadEmpleados()
     }
 
@@ -66,11 +65,17 @@ class HoraExtraFormViewModel @Inject constructor(
         }
     }
 
-    private fun loadHoraExtra(id: Int?){
-        if(id == null || id == 0){
-            _state.update { it.copy(isNew = true, horaExtraId = null) }
-            return
-        }
+     fun loadHoraExtra(id: Int){
+         if(id == 0 ){
+             val empleados = _state.value.empleados
+             val ocupaciones = _state.value.ocupaciones
+             _state.value = HoraExtraFormUiState(
+                 empleados = empleados,
+                 ocupaciones = ocupaciones
+             )
+             return
+         }
+
 
         viewModelScope.launch {
             val horaExtra = getHoraExtraUseCase(id)
@@ -95,14 +100,14 @@ class HoraExtraFormViewModel @Inject constructor(
     }
 
     private fun onSave(){
-        val empleadoId = state.value.empleadoId
+        val empleadoId = state.value.empleadoId?.toIntOrNull() ?: 0
         val fecha = state.value.fecha
-        val cantidadHoras = state.value.cantidadHoras
+        val cantidadHoras = state.value.cantidadHoras.toIntOrNull()?:0
         val tipo = state.value.tipo
 
-        val empleadoValidation = validateEmpleadoId(empleadoId.toInt())
+        val empleadoValidation = validateEmpleadoId(empleadoId)
         val fechaValidation = validateFecha(fecha)
-        val cantidadHorasValidation = validateCantidadHoras(cantidadHoras)
+        val cantidadHorasValidation = validateCantidadHoras(cantidadHoras.toString())
 
         if(!empleadoValidation.isValid || !fechaValidation.isValid || !cantidadHorasValidation.isValid){
             _state.update {
@@ -115,7 +120,7 @@ class HoraExtraFormViewModel @Inject constructor(
             return
         }
 
-        val tipoValidation = validateTipoHoraExtra(state.value.tipo, cantidadHoras)
+        val tipoValidation = validateTipoHoraExtra(state.value.tipo, cantidadHoras.toString())
 
         if(!tipoValidation.isValid){
             _state.update {
